@@ -1,7 +1,7 @@
 const { verify } = require("jsonwebtoken");
 const Oeuvre = require("../models/oeuvre.model");
 const User = require("../models/user.model");
-const { maintenant } = require("../../utilitaires/formatDate");
+const { maintenant } = require("../utilitaires/formatDate");
 
 
 const isValidOeuvre = (req, res, next)=> {

@@ -10,9 +10,9 @@ const roles= [USER, REDACTEUR, ADMIN ];
 
 const userSchema = new Schema({
     
+    pseudo : {type:String, default:"Nouvel utilisateur"},
     email : {type:String, required:true},
     password : {type:String, required:true},
-    pseudo : String,
     role : {type:String, enum: roles, default:USER},
     likes : {type:[{type:Types.ObjectId, ref:"oeuvres"}], default:[]},
     commentaires: {type:[{type:Types.ObjectId, ref:"commentaires"}], default:[]}

@@ -2,8 +2,8 @@ const { compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const { Router } = require("express");
 const User = require("../models/user.model");
-const { itemHashe } = require("../../utilitaires/hashache");
-const { maintenant } = require("../../utilitaires/formatDate")
+const { itemHashe } = require("../utilitaires/hashache");
+const { maintenant } = require("../utilitaires/formatDate")
 
 
 const loginRoute = Router();
@@ -24,7 +24,8 @@ loginRoute.post("/", async (req, res)=>{ // vérification de email/password pour
             role : roleHash
         };
         const token = sign(KEY_USER_PUBLIC, process.env.KEY_JWT_PRIVATE);
-        res.json({ msg: "Bienvenu", token : token }); // authentification => qui est l'utilistateur?
+        console.log(token);
+        res.json( token ); // authentification => qui est l'utilistateur?
                                                     // autorisation associé à l'utilisateur authentifié
                                                     // jsonwebtoken : https://jwt.io
     } catch (ex) {

@@ -13,10 +13,13 @@ const myStyles = StyleSheet.create({
         textAlign: 'center'
     },
     box: {
-        flex: 1,
+        flex:1,
         backgroundColor: '#234',
         alignItems: 'center',
         justifyContent: 'center',
+        // alignContent:'space-around',
+        // height:400,
+        // width:400
     },
     input: {
         fontSize:25,

@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native'
 import React, { useContext } from 'react'
-import { StyleContext } from '../context/style.context';
-import { UserContext } from '../context/user.context';
+import { StyleContext } from '../contexts/style.context';
+
 
 const Accueil = () => {
   const { styles } = useContext(StyleContext);

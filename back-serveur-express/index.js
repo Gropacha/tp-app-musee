@@ -1,5 +1,5 @@
-const  connexionMongoDB  = require("./back/config");
-const raccordementDesRoutes = require("./back/routes/routes");
+const  connexionMongoDB  = require("./config");
+const raccordementDesRoutes = require("./routes/routes");
 const { maintenant } = require("./utilitaires/formatDate");
 
 
