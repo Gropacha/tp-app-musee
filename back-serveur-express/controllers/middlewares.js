@@ -3,6 +3,11 @@ const Oeuvre = require("../models/oeuvre.model");
 const User = require("../models/user.model");
 const { maintenant } = require("../utilitaires/formatDate");
 
+/////////////////////////// FIN DES IMPORTS
+const pageNonTrouvee = (req, res)=> {
+  console.log(maintenant(), "Page non trouvée");
+  res.status(404).json({msg: "Page non trouvée", err:"Page non trouvée"});
+};
 
 const isValidOeuvre = (req, res, next)=> {
   try {
@@ -10,8 +15,8 @@ const isValidOeuvre = (req, res, next)=> {
       const { error } = Oeuvre.isValid(body);
       if (error) return res.status(400).json({msg: error.details});
       next();
-  } catch (ex) {
-  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isValidOeuvre", ex: ex });
+  } catch (err) {
+  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isValidOeuvre", err: err });
   }
 };
 
@@ -23,8 +28,8 @@ const isValidUser = async (req, res, next) => {
       const isUserAlreadyRegistred = await User.findOne({email:body.email});
       if (isUserAlreadyRegistred) return res.status(400).json({msg : "email déjà utilisé"});
       next();
-  } catch (ex) {
-  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isValidUser", ex: ex });
+  } catch (err) {
+  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isValidUser", err: err });
   }
 }
 
@@ -37,8 +42,8 @@ const id_user = async (req, res, next) => {
       } else {
         res.status(404).json({msg: "l'utilisateur demandé n'existe pas !!!"});
       }
-  } catch (ex) {
-  res.status(404).json({msg: "l'utilisateur demandé n'existe pas !!!", ex: ex});
+  } catch (err) {
+  res.status(404).json({msg: "l'utilisateur demandé n'existe pas !!!", err: err});
   }
 }
 
@@ -54,17 +59,20 @@ const isLogin =  (req, res, next) => { // vérification du token d'authentificat
               req.payload = load;
               req.body.auteur = load._id;
               return next();
-          } catch (ex) {
+          } catch (err) {
           console.log(maintenant()+" / Erreur Votre token de connexion n'est pas valide !");
-          return res.status(400).json({msg : "JWT invalid"});
+          return res.status(400).json({msg : "JWT invalid", err:err});
           }
       }
-  } catch (ex) {
-  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isLogin", ex: ex });
+  } catch (err) {
+  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isLogin", err: err });
   }
 }
 
-const isAdmin = (req, res, next) => { // soit interroger le payload (le cas ici) / soit faire une demande async/await à la base de donnée si on ne veut pas que les identifiants(même hashés) soit contenus dans le payload
+const isAdmin = (req, res, next) => { 
+// soit interroger le payload (le cas ici) 
+//soit faire une demande async/await à la base de donnée 
+//si on ne veut pas que les identifiants(même hashés) soit contenus dans le payload
   try {
       const roleHashUser = req.payload.role;
       if (User.isAdmin(roleHashUser)) {
@@ -72,8 +80,8 @@ const isAdmin = (req, res, next) => { // soit interroger le payload (le cas ici)
       } else {
           res.status(403).json({msg: "Vous n'avez pas les droits nécessaires"});
       }
-  } catch (ex) {
-  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isAdmin", ex: ex });
+  } catch (err) {
+  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isAdmin", err: err });
   }
 }
 
@@ -93,8 +101,8 @@ const isAllowedToEditOeuvre =  ({payload}, res, next) => { // seul un Admin ou u
       } else {
           res.status(403).json({msg: "Vous n'avez pas les droits nécessaires pour modifier un article"});
       }
-  } catch (ex) {
-  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isAllowedToEditOeuvre", ex: ex });
+  } catch (err) {
+  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isAllowedToEditOeuvre", err: err });
   }
 }
 
@@ -107,8 +115,8 @@ const isAllowedToEditUser =  ({payload}, res, next) => { // seul un Admin ou l'u
       } else {
         res.status(403).json({msg: "Vous n'avez pas les droits nécessaires pour modifier un utilisateur"});
       }
-  } catch (ex) {
-  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isAllowedToEditUser", ex: ex });
+  } catch (err) {
+  return res.status(404).json({ msg: "Erreur fatale, sortie de route middleware / isAllowedToEditUser", err: err });
   }
 }
 
@@ -126,6 +134,8 @@ const id_oeuvre = async (req, res, next) => {
   }
 }
 
+//////////////////////////////////////////// EXPORTS MUTILPLES : MIDDLEWARES
+module.exports.pageNonTrouvee = pageNonTrouvee;
 module.exports.isValidUser = isValidUser;
 module.exports.isValidOeuvre = isValidOeuvre;
 module.exports.id_user = id_user;
@@ -134,5 +144,5 @@ module.exports.isLogin = isLogin;
 module.exports.isAdmin = isAdmin;
 module.exports.isAllowedToEditOeuvre = isAllowedToEditOeuvre;
 module.exports.isAllowedToEditUser = isAllowedToEditUser;
-
 module.exports.testRole = testRole;
+////////////////////////////////////////////FIN DU FICHIER

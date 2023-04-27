@@ -8,15 +8,15 @@ import { ProfilContext } from '../contexts/profil.context';
 
 const Login = () => {
 
-  const url = new URL("http://10.0.2.2:777/");
   
-  const { profil, saveProfil } = useContext(ProfilContext);
+  
+  const { profil, saveProfil, url, setToken } = useContext(ProfilContext);
 
   const [ message, setMessage ] = useState("Bienvenue");
 
   const [identifiants, setIdentifiants] = useState({
-    email: "",
-    password: ""
+    email: "test@yahoo.fr",
+    password: "Qwerty12345"
   });
 
 
@@ -44,10 +44,9 @@ const Login = () => {
           const res = await fetch(url, {method: 'POST', headers:{'Content-Type': 'application/json;charset=utf-8'}, body: JSON.stringify(identifiants)});
           const reponseJson = await res.json();
           if (res.status==200){
-              const token = reponseJson;
-              console.log("token: ",token);
+              setToken(reponseJson);
               setMessage("bienvenue"+profil.pseudo);
-              saveProfil({ ...profil, token:token });
+              saveProfil({ ...profil, token:reponseJson });
               setIdentifiants({email:"", password:""});
           } else {
               setMessage("login incorrect");
@@ -66,10 +65,12 @@ const Login = () => {
       <TextInput maxLength={50} inputMode='email' placeholder='email' style={styles.input} onChangeText={(text)=>setIdentifiants({...identifiants, email:text})} value={identifiants.email}/>
       <TextInput maxLength={50} placeholder='password' style={styles.input} onChangeText={(text)=>setIdentifiants({...identifiants, password:text})} value={identifiants.password}/>
       <Button title="créer un compte" onPress={creationCompte}/></>}
+
       {(profil.email!=="")&&(profil.token==null)&&<><Text style={ styles.titre }>Login</Text>
       <TextInput maxLength={50} inputMode='email' placeholder='email' style={styles.input} onChangeText={(text)=>setIdentifiants({...identifiants, email:text})} value={identifiants.email}/>
       <TextInput maxLength={50} placeholder='password' style={styles.input} onChangeText={(text)=>setIdentifiants({...identifiants, password:text})} value={identifiants.password}/>
       <Button title="Login" onPress={loginJWT}/></>}
+
       <Text style={ styles.titre }>{message} </Text>
     </View>
   

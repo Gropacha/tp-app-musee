@@ -6,6 +6,7 @@ export const ProfilContext = createContext();
 
 export const ProfilContextProvider = ( props ) => {
 
+    const url = new URL("http://10.0.2.2:777/");
     const [ profil, setProfil] = useState({
         pseudo:"",
         email:"",
@@ -14,6 +15,8 @@ export const ProfilContextProvider = ( props ) => {
         _id:"",
         role:""
     });
+
+    const [token, setToken ] = useState({_id:"", token:""});
 
 let db;
 
@@ -64,7 +67,7 @@ function openDB(){
 ////////     FIN INITIALISATION DU PROFIL     ////////////////
 ///////////////////////////////////////////////////////////////
 
-    const saveProfil = ({pseudo, email, password, token, _id, role}) =>{
+    const saveProfil = async ({pseudo, email, password, token, _id, role}) =>{
         setProfil({pseudo, email, password, token, _id, role});
         // if (email===profil.email) {
         //     db.transaction((tx)=>{tx.executeSql(
@@ -74,17 +77,27 @@ function openDB(){
         //         (transact, err)=>{console.log(maintenant(), "Erreur de sauvegarde du profil (UPDATE) en SQLITE", err)}
         //     )}); // fin UPDATE
         // } else {
-            // db.transaction((tx)=>{tx.executeSql(
-            //     `INSERT INTO profils ( pseudo, email, password, token, _id, role )
-            //      VALUES ( ?, ?, ?, ?, ?, ?) ;`,
-            //     [pseudo, email, password, token, _id, role],
-            //     (transact, resultat)=>{ setProfil({pseudo, email, password, token, _id, role}); console.log(maintenant(), "Sauvegarde du profil (INSERT) en SQLITE") },
-            //     (transact, err)=>{console.log(maintenant(), "Erreur de sauvegarde du profil (INSERT) en SQLITE", err)}
-            // )});// fin INSERT
-    //     }
+        //     db.transaction((tx)=>{tx.executeSql(
+        //         `INSERT INTO profils ( pseudo, email, password, token, _id, role )
+        //          VALUES ( ?, ?, ?, ?, ?, ?) ;`,
+        //         [pseudo, email, password, token, _id, role],
+        //         (transact, resultat)=>{ setProfil({pseudo, email, password, token, _id, role}); console.log(maintenant(), "Sauvegarde du profil (INSERT) en SQLITE") },
+        //         (transact, err)=>{console.log(maintenant(), "Erreur de sauvegarde du profil (INSERT) en SQLITE", err)}
+        //     )});// fin INSERT
+        // }
+        try {
+            const res = await fetch(url+"/user/"+token.id, { method:'get', headers:{'user-token':token.token}})
+            const data = await res.json();
+            console.log(maintenant(), data);
+        } catch (err) {
+
+        }
+
+
+
     }// FIN DE saveProfil()
 
-return  <ProfilContext.Provider value={{ profil, saveProfil }}>
+return  <ProfilContext.Provider value={{ profil, url, saveProfil, setToken }}>
                 { props.children }
         </ProfilContext.Provider>
 }

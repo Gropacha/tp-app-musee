@@ -1,7 +1,7 @@
 const Oeuvre = require("../models/oeuvre.model");
 const { maintenant } = require("../utilitaires/formatDate")
 
-
+/////////////////////////// FIN DES IMPORTS
 const createNewOeuvre = async ({body}, res)=>{
    try { const dt_creation = new Date();
    const newOeuvre = new Oeuvre({...body, dt_creation});
@@ -54,6 +54,7 @@ const getAllOeuvre = async (req, res)=>{
    }
 };
 
+//////////////////////////////////////////// EXPORT UNIQUE DU CONTROLLER OEUVRE
 module.exports = { 
    createNewOeuvre, 
    getOeuvre, 
@@ -61,3 +62,4 @@ module.exports = {
    deleteOeuvre, 
    getAllOeuvre
 };
+////////////////////////////////////////////FIN DU FICHIER
