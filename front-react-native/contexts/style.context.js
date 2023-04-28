@@ -32,8 +32,14 @@ const myStyles = StyleSheet.create({
     },
     alert: {
         padding:10,
-        color:'red'
-    }
+        color:'yellow',
+        fontSize:20
+    },
+    container: {
+        flex:1,
+        backgroundColor: '#green',
+        justifyContent: 'center'
+      }
 });
 
 const [ styles, setStyles ] = useState( myStyles );

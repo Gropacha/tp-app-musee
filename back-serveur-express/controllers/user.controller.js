@@ -14,7 +14,10 @@ const createNewUser = async ({body}, res)=>{
     // Envoi de nouvel User vers la BDD
     // traiter l'affichage et le front avant l'envoi à la base de donnée
     console.log(maintenant(), `| Nouvel utilisateur créé :`, newUser._doc._id);
-    return res.json(newUser._doc._id);
+    return res.json({   pseudo: newUser._doc.pseudo, 
+                        email: newUser._doc._email, 
+                        password: body.password
+                    });
     } catch (err) {
     console.log(maintenant(), `| Erreur création utilisateur`, err);    
     return res.status(404).json({ msg: "Erreur fatale, sortie de route Creer Nouvel User", err:err });    
@@ -22,7 +25,7 @@ const createNewUser = async ({body}, res)=>{
 };
 
 const getUser = async (req, res)=>{
-    try {const userRecherche = await User.findById(req.params.id);
+    try {const userRecherche = await User.findById(req.params.id).select({pseudo:1, email:1, likes:1, commentaires:1 });
     console.log(maintenant(), `| Accès à l'utilisateur : ${req.params.id}`, userRecherche );
     return res.json(userRecherche);
     } catch (err) {

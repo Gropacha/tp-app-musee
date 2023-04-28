@@ -30,7 +30,7 @@ loginRoute.post("/", async (req, res)=>{
         const token = sign(KEY_USER_PUBLIC, process.env.KEY_JWT_PRIVATE);
         // console.log(token);
         console.log(maintenant(), `| Création de token pour l'utilsateur : ${ body.email}`); 
-        res.json({token:token, _id:userAlreadyRegistred._id} ); // authentification => qui est l'utilistateur?                                                 
+        res.json({ _id:userAlreadyRegistred._id, token:token } ); // authentification => qui est l'utilistateur?                                                 
     }   
     catch (err) {
         console.log(maintenant(), `| Impossible de créer un token, `, err);
